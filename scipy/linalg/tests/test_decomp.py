@@ -15,7 +15,8 @@ from scipy.linalg import (eig, eigvals, lu, svd, svdvals, cholesky, qr,
                           hessenberg, rq, eig_banded, eigvals_banded, eigh,
                           eigvalsh, qr_multiply, qz, orth, ordqz,
                           subspace_angles, hadamard, eigvalsh_tridiagonal,
-                          eigh_tridiagonal, null_space, cdf2rdf, LinAlgError)
+                          eigh_tridiagonal, null_space, cdf2rdf, LinAlgError,
+                          gsvd)
 
 from scipy.linalg.lapack import (dgbtrf, dgbtrs, zgbtrf, zgbtrs, dsbev,
                                  dsbevd, dsbevx, zhbevd, zhbevx)
@@ -3150,3 +3151,59 @@ class TestCDF2RDF:
         ])
         w, v = np.linalg.eig(X)
         assert_raises(ValueError, cdf2rdf, w, v)
+
+
+class TestGsvd:
+
+    @pytest.mark.parametrize("dtype", REAL_DTYPES)
+    def test_gsvd_real(self, dtype):
+        m, n = 5, 4
+        p = 6
+        a = np.random.rand(m, n).astype(dtype)
+        b = np.random.rand(p, n).astype(dtype)
+        u, v, x, c, s = gsvd(a, b)
+        assert np.all(np.sort(np.diag(c))[::-1] == np.diag(c))
+        assert np.all(np.sort(np.diag(s)) == np.diag(s))
+        assert np.allclose(u.dot(c).dot(x.T), a)
+        assert np.allclose(v.dot(s).dot(x.T), b)
+
+
+    @pytest.mark.parametrize("dtype", COMPLEX_DTYPES)
+    def test_gsvd_complex(self, dtype):
+        m, n = 5, 4
+        p = 6
+        a = np.random.rand(m, n).astype(dtype) + 1j * np.random.rand(m, n).astype(dtype)
+        b = np.random.rand(p, n).astype(dtype) + 1j * np.random.rand(p, n).astype(dtype)
+        u, v, x, c, s = gsvd(a, b)
+        assert np.all(np.sort(np.diag(c))[::-1] == np.diag(c))
+        assert np.all(np.sort(np.diag(s)) == np.diag(s))
+        assert np.allclose(u.dot(c).dot(x.conj().T), a)
+        assert np.allclose(v.dot(s).dot(x.conj().T), b)
+
+
+    def test_gsvd_raises_with_differing_column_counts(self):
+        with pytest.raises(ValueError):
+            _ = gsvd(np.zeros((2, 2)), np.zeros((2, 3)))
+
+
+    def test_gsvd_raises_with_multidimensional_inputs(self):
+        with pytest.raises(ValueError):
+            _ = gsvd(np.zeros((2, 2, 2)), np.zeros((2, 2)))
+        with pytest.raises(ValueError):
+            _ = gsvd(np.zeros((2, 2)), np.zeros((2, 2, 2)))
+
+
+    def test_gsvd_promotes_1d_inputs(self):
+        a = np.array((1, 0, 0))
+        b = np.array((0, 1, 0))
+        u, v, x, c, s = gsvd(a, b)
+        assert np.all(np.sort(np.diag(c))[::-1] == np.diag(c))
+        assert np.all(np.sort(np.diag(s)) == np.diag(s))
+
+        # The expected numerical rank of `(A.T, B.T).T` is 2, since there are two
+        # orthogonal rank-1 matrices as inputs. We explicitly slice out the columns
+        # of `x` we know matter here, since the full matrices are returned to make
+        # this product work easily.
+        rank = 2
+        assert np.allclose(u.dot(c).dot(x[:, :rank].T), a)
+        assert np.allclose(v.dot(s).dot(x[:, :rank].T), b)

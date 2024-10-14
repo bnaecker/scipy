@@ -1429,3 +1429,127 @@ subroutine <prefix>geequb(m,n,a,lda,r,c,rowcnd,colcnd,amax,info)
     integer intent(out) :: info
 
 end subroutine <prefix>geequb
+
+subroutine <prefix2>ggsvd3(compute_u,compute_v,compute_q,m,n,p,k,l,a,lda,b,ldb,alpha,beta,u,ldu,v,ldv,q,ldq,work,lwork,iwork,info)
+    callstatement (*f2py_func)(compute_u?"U":"N",compute_v?"V":"N",compute_q?"Q":"N",&m,&n,&p,&k,&l,a,&lda,b,&ldb,alpha,beta,u,&ldu,v,&ldv,q,&ldq,work,&lwork,iwork,&info)
+    callprotoargument char*,char*,char*,F_INT*,F_INT*,F_INT*,F_INT*,F_INT*,<ctype2>*,F_INT*,<ctype2>*,F_INT*,<ctype2>*,<ctype2>*,<ctype2>*,F_INT*,<ctype2>*,F_INT*,<ctype2>*,F_INT*,<ctype2>*,F_INT*,F_INT*,F_INT*
+
+    integer,optional,intent(in),check(compute_u == 0 || compute_u == 1):: compute_u = 1
+    integer,optional,intent(in),check(compute_v == 0 || compute_v == 1):: compute_v = 1
+    integer,optional,intent(in),check(compute_q == 0 || compute_q == 1):: compute_q = 1
+    integer,intent(hide),depend(a) :: m=shape(a, 0)
+    integer,intent(hide),depend(a) :: n=shape(a, 1)
+    integer,intent(hide),depend(b) :: p=shape(b, 0)
+    integer,intent(out) :: k
+    integer,intent(out) :: l
+    <ftype2> dimension(lda,n),intent(in,out) :: a
+    integer, intent(hide),check(shape(a, 0) == lda),depend(a) :: lda=shape(a, 0)
+    <ftype2> dimension(ldb,n),intent(in,out) :: b
+    integer, intent(hide),check(shape(b, 0) == ldb),depend(b) :: ldb=shape(b, 0)
+    <ftype2> dimension(n),intent(out) :: alpha
+    <ftype2> dimension(n),intent(out) :: beta
+    <ftype2> dimension(ldu,m),intent(out) :: u
+    integer, intent(hide) :: ldu=m
+    <ftype2> dimension(ldv,p),intent(out) :: v
+    integer, intent(hide) :: ldv=p
+    <ftype2> dimension(ldq,n),intent(out) :: q
+    integer, intent(hide) :: ldq=n
+    <ftype2> dimension(lwork),intent(hide) :: work
+    integer :: lwork
+    integer dimension(lwork),intent(out) :: iwork
+    integer,intent(out) :: info
+end subroutine <prefix2>ggsvd3
+
+subroutine <prefix2>ggsvd3_lwork(compute_u,compute_v,compute_q,m,n,p,k,l,a,lda,b,ldb,alpha,beta,u,ldu,v,ldv,q,ldq,work,lwork,iwork,info)
+    fortranname <prefix2>ggsvd3
+    callstatement (*f2py_func)(compute_u?"U":"N",compute_v?"V":"N",compute_q?"Q":"N",&m,&n,&p,&k,&l,a,&lda,b,&ldb,alpha,beta,u,&ldu,v,&ldv,q,&ldq,&work,&lwork,iwork,&info)
+    callprotoargument char*,char*,char*,F_INT*,F_INT*,F_INT*,F_INT*,F_INT*,<ctype2>*,F_INT*,<ctype2>*,F_INT*,<ctype2>*,<ctype2>*,<ctype2>*,F_INT*,<ctype2>*,F_INT*,<ctype2>*,F_INT*,<ctype2>*,F_INT*,F_INT*,F_INT*
+
+    integer,optional,intent(in),check(compute_u == 0 || compute_u == 1):: compute_u = 1
+    integer,optional,intent(in),check(compute_v == 0 || compute_v == 1):: compute_v = 1
+    integer,optional,intent(in),check(compute_q == 0 || compute_q == 1):: compute_q = 1
+    integer,intent(hide),depend(a) :: m=shape(a, 0)
+    integer,intent(hide),depend(a) :: n=shape(a, 1)
+    integer,intent(hide),depend(b) :: p=shape(b, 0)
+    integer,intent(hide) :: k = 0
+    integer,intent(hide) :: l = 0
+    <ftype2> dimension(lda,n),intent(in) :: a
+    integer, intent(hide),check(shape(a, 0) == lda),depend(a) :: lda=shape(a, 0)
+    <ftype2> dimension(ldb,n),intent(in) :: b
+    integer, intent(hide),check(shape(b, 0) == ldb),depend(b) :: ldb=shape(b, 0)
+    <ftype2> dimension(n),intent(hide) :: alpha
+    <ftype2> dimension(n),intent(hide) :: beta
+    <ftype2> dimension(ldu,m),intent(hide) :: u
+    integer, intent(hide) :: ldu=m
+    <ftype2> dimension(ldv,p),intent(hide) :: v
+    integer, intent(hide) :: ldv=p
+    <ftype2> dimension(ldq,n),intent(hide) :: q
+    integer, intent(hide) :: ldq=n
+    <ftype2> intent(out) :: work
+    integer,intent(hide) :: lwork = -1
+    integer dimension(1),intent(hide) :: iwork
+    integer,intent(out) :: info
+end subroutine <prefix2>ggsvd3_lwork
+
+subroutine <prefix2c>ggsvd3(compute_u,compute_v,compute_q,m,n,p,k,l,a,lda,b,ldb,alpha,beta,u,ldu,v,ldv,q,ldq,work,lwork,rwork,iwork,info)
+    callstatement (*f2py_func)(compute_u?"U":"N",compute_v?"V":"N",compute_q?"Q":"N",&m,&n,&p,&k,&l,a,&lda,b,&ldb,alpha,beta,u,&ldu,v,&ldv,q,&ldq,work,&lwork,rwork,iwork,&info)
+    callprotoargument char*,char*,char*,F_INT*,F_INT*,F_INT*,F_INT*,F_INT*,<ctype2c>*,F_INT*,<ctype2c>*,F_INT*,<ctype2>*,<ctype2>*,<ctype2c>*,F_INT*,<ctype2c>*,F_INT*,<ctype2c>*,F_INT*,<ctype2c>*,F_INT*,<ctype2>*,F_INT*,F_INT*
+
+    integer,optional,intent(in),check(compute_u == 0 || compute_u == 1):: compute_u = 1
+    integer,optional,intent(in),check(compute_v == 0 || compute_v == 1):: compute_v = 1
+    integer,optional,intent(in),check(compute_q == 0 || compute_q == 1):: compute_q = 1
+    integer,intent(hide),depend(a) :: m=shape(a, 0)
+    integer,intent(hide),depend(a) :: n=shape(a, 1)
+    integer,intent(hide),depend(b) :: p=shape(b, 0)
+    integer,intent(out) :: k
+    integer,intent(out) :: l
+    <ftype2c> dimension(lda,n),intent(in,out) :: a
+    integer, intent(hide),check(shape(a, 0) == lda),depend(a) :: lda=shape(a, 0)
+    <ftype2c> dimension(ldb,n),intent(in,out) :: b
+    integer, intent(hide),check(shape(b, 0) == ldb),depend(b) :: ldb=shape(b, 0)
+    <ftype2> dimension(n),intent(out) :: alpha
+    <ftype2> dimension(n),intent(out) :: beta
+    <ftype2c> dimension(ldu,m),intent(out) :: u
+    integer, intent(hide) :: ldu=m
+    <ftype2c> dimension(ldv,p),intent(out) :: v
+    integer, intent(hide) :: ldv=p
+    <ftype2c> dimension(ldq,n),intent(out) :: q
+    integer, intent(hide) :: ldq=n
+    <ftype2c> dimension(lwork),intent(hide) :: work
+    integer :: lwork
+    <ftype2> dimension(lwork),intent(hide):: rwork
+    integer dimension(lwork),intent(out) :: iwork
+    integer,intent(out) :: info
+end subroutine <prefix2>ggsvd3
+
+subroutine <prefix2c>ggsvd3_lwork(compute_u,compute_v,compute_q,m,n,p,k,l,a,lda,b,ldb,alpha,beta,u,ldu,v,ldv,q,ldq,work,lwork,rwork,iwork,info)
+    fortranname <prefix2c>ggsvd3
+    callstatement (*f2py_func)(compute_u?"U":"N",compute_v?"V":"N",compute_q?"Q":"N",&m,&n,&p,&k,&l,a,&lda,b,&ldb,alpha,beta,u,&ldu,v,&ldv,q,&ldq,&work,&lwork,rwork,iwork,&info)
+    callprotoargument char*,char*,char*,F_INT*,F_INT*,F_INT*,F_INT*,F_INT*,<ctype2c>*,F_INT*,<ctype2c>*,F_INT*,<ctype2>*,<ctype2>*,<ctype2c>*,F_INT*,<ctype2c>*,F_INT*,<ctype2c>*,F_INT*,<ctype2c>*,F_INT*,<ctype2>*,F_INT*,F_INT*
+
+    integer,optional,intent(in),check(compute_u == 0 || compute_u == 1):: compute_u = 1
+    integer,optional,intent(in),check(compute_v == 0 || compute_v == 1):: compute_v = 1
+    integer,optional,intent(in),check(compute_q == 0 || compute_q == 1):: compute_q = 1
+    integer,intent(hide),depend(a) :: m=shape(a, 0)
+    integer,intent(hide),depend(a) :: n=shape(a, 1)
+    integer,intent(hide),depend(b) :: p=shape(b, 0)
+    integer,intent(hide) :: k = 0
+    integer,intent(hide) :: l = 0
+    <ftype2c> dimension(lda,n),intent(in) :: a
+    integer, intent(hide),check(shape(a, 0) == lda),depend(a) :: lda=shape(a, 0)
+    <ftype2c> dimension(ldb,n),intent(in) :: b
+    integer, intent(hide),check(shape(b, 0) == ldb),depend(b) :: ldb=shape(b, 0)
+    <ftype2> dimension(n),intent(hide) :: alpha
+    <ftype2> dimension(n),intent(hide) :: beta
+    <ftype2c> dimension(ldu,m),intent(hide) :: u
+    integer, intent(hide) :: ldu=m
+    <ftype2c> dimension(ldv,p),intent(hide) :: v
+    integer, intent(hide) :: ldv=p
+    <ftype2c> dimension(ldq,n),intent(hide) :: q
+    integer, intent(hide) :: ldq=n
+    <ftype2c> intent(out) :: work
+    integer,intent(hide) :: lwork = -1
+    <ftype2> dimension(1),intent(hide) :: rwork
+    integer dimension(1),intent(hide) :: iwork
+    integer,intent(out) :: info
+end subroutine <prefix2>ggsvd3_lwork

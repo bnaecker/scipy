@@ -840,6 +840,15 @@ All functions
 
    ilaver
 
+   sggsvd3
+   dggsvd3
+   cggsvd3
+   zggsvd3
+
+   sggsvd3_lwork
+   dggsvd3_lwork
+   cggsvd3_lwork
+   zggsvd3_lwork
 """
 #
 # Author: Pearu Peterson, March 2002

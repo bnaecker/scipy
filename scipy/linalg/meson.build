@@ -224,6 +224,7 @@ python_sources = [
   '_decomp.py',
   '_decomp_cholesky.py',
   '_decomp_cossin.py',
+  '_decomp_gsvd.py',
   '_decomp_ldl.py',
   '_decomp_lu.py',
   '_decomp_lu_cython.pyi',

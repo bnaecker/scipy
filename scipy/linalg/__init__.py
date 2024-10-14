@@ -106,6 +106,7 @@ Decompositions
    hessenberg - Hessenberg form of a matrix
    cdf2rdf - Complex diagonal form to real diagonal block form
    cossin - Cosine sine decomposition of a unitary or orthogonal matrix
+   gsvd - Generalized singular value decomposition
 
 .. seealso::
 
@@ -221,6 +222,7 @@ from ._procrustes import *
 from ._decomp_update import *
 from ._sketches import *
 from ._decomp_cossin import *
+from ._decomp_gsvd import gsvd
 
 # Deprecated namespaces, to be removed in v2.0.0
 from . import (
